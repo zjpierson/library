@@ -14,7 +14,7 @@ CREATE TABLE AUTHOR (
 
 
 /******  CREATE PARTON TABLE ******/
-CREATE TABLE PARTON (
+CREATE TABLE PATRON (
 	patronNo bigint NOT NULL PRIMARY KEY,
 	patronName varchar (100) NOT NULL ,
 	patronType varchar (50) NOT NULL
