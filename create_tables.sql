@@ -13,7 +13,7 @@ CREATE TABLE AUTHOR (
 );
 
 
-/******  CREATE PARTON TABLE ******/
+/******  CREATE PATRON TABLE ******/
 CREATE TABLE PATRON (
 	patronNo bigint NOT NULL PRIMARY KEY,
 	patronName varchar (100) NOT NULL ,
