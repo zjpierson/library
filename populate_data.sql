@@ -1,10 +1,10 @@
-insert into AUTHOR values( 'Name1', 1);
-insert into AUTHOR values( 'Name2', 2);
-insert into AUTHOR values( 'Name3', 3);
-insert into AUTHOR values( 'Name4', 4);
-insert into AUTHOR values( 'Name5', 5);
-insert into AUTHOR values( 'Name6', 6);
-insert into AUTHOR values( 'Name7', 7);
+insert into AUTHOR values( 1, 'Name1');
+insert into AUTHOR values( 2, 'Name2');
+insert into AUTHOR values( 3, 'Name3');
+insert into AUTHOR values( 4, 'Name4');
+insert into AUTHOR values( 5, 'Name5');
+insert into AUTHOR values( 6, 'Name6');
+insert into AUTHOR values( 7, 'Name7');
 
 insert into BOOK values( 1, 'Title1', 1000, 1);
 insert into BOOK values( 2, 'Title2', 1001, 2);
