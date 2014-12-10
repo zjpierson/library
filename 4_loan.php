@@ -20,12 +20,11 @@ $pnames = mysql_query("
     SELECT patronName
     FROM PATRON");
 $btitles = mysql_query("
-    SELECT title
+    SELECT title, copyNo
     FROM COPYBOOK NATURAL JOIN BOOK 
     NATURAL LEFT JOIN LOAN
     WHERE loanNo IS NULL");
-/*$btitles = mysql_query("
-    SELECT titles");*/
+
 $numPatrons = mysql_numrows($pnames);
 $numTitles = mysql_numrows($btitles);
 
@@ -33,36 +32,48 @@ if (isset($_POST['submit']))
 {
    $name = $_POST['patron'];
    $title = $_POST['title'];
-   $query = mysql_query("
-       SELECT COUNT(loanNo) 
-       FROM LOAN NATURAL JOIN PATRON
-       WHERE patronName = $name");
-    $row=mysql_fetch_row($query);
-    echo "$row[0]";
-   if($query < 3)
+   if($title != null)
    {
-       $copyNo = mysql(" 
-         SELECT copyNo
-         FROM COPYBOOK
-         WHERE title = $title");
-       $copyNo = mysql_fetch_row($copyNo);
-       $patronNo = mysql_query("
-         SELECT patronNo
-         FROM PATRON
-         WHERE patronName = $name");
-       $count = mysql_query("
-           SELECT COUNT(*)
-           FROM LOAN");
-       $count++;
        $query = mysql_query("
-           INSERT INTO LOAN
-           VALUES($count, $copyNo, $patronNo, '2014-12-10', '2014-12-15')");
+           SELECT COUNT(loanNo) 
+           FROM LOAN NATURAL JOIN PATRON
+           WHERE patronName = '$name'");
+       $row=mysql_fetch_row($query);
+       $message = "*****$name already has 3 books checked out*****";
+       if($row[0] < 3)
+       {
+           $copyNo = mysql_query("
+               SELECT copyNo
+               FROM COPYBOOK NATURAL JOIN BOOK
+               NATURAL LEFT JOIN LOAN
+               WHERE title = '$title' AND loanNo IS NULL");
+           $copyNo = mysql_fetch_row($copyNo);
+           $patronNo = mysql_query("
+             SELECT patronNo
+             FROM PATRON
+             WHERE patronName = '$name'");
+           $patronNo = mysql_fetch_row($patronNo);
+           $count = mysql_query("
+               SELECT COUNT(*)
+               FROM LOAN");
+           $count = mysql_fetch_row($count);
+           $count[0]++;
+           $query = mysql_query("
+               INSERT INTO LOAN
+               VALUES($count[0], $copyNo[0], $patronNo[0], '2014-12-10', '2014-12-15')");
+       $message = "*****Book successfully check out to $name*****";
+       }
+       $res = mysql_query($query);
    }
-   $res = mysql_query($query);
-   $message = "*****Patron added*****";
+
 }
 
 
+$btitles = mysql_query("
+    SELECT title, copyNo
+    FROM COPYBOOK NATURAL JOIN BOOK 
+    NATURAL LEFT JOIN LOAN
+    WHERE loanNo IS NULL");
 ?>
 
 <SELECT id=patron name=patron>
@@ -87,13 +98,24 @@ for ($i = 0; $i < $numTitles; $i++)
 }
 mysql_close($link);
 ?>
+
 </SELECT>
 
+<?php
+if(isset($_POST['submit']))
+{
+    if($title != NULL)
+    echo "<BR><BR> $message";
+}
+?>
 
 
 <P>
 <INPUT TYPE="SUBMIT" VALUE="Check Out" id="submit" name="submit">
 <P>
+<BR>
+<BR>
+<a href = library.html>Return to Main Web Page</a>
 </CENTER>
 </FORM>
 </BODY>
